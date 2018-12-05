@@ -26,14 +26,6 @@ public class LinkedList /*implements List*/ {
 		this.size = 0;
 	}
 	
-	public void add(Object obj) throws Exception {
-		Node newNode = new Node(obj);
-		newNode.next = this.head;
-		this.head.prev = newNode;
-		this.head = newNode;	
-		this.size++;
-	}
-	
 	public void add(String key, Object value) {
 		Node newNode = new Node(key, value);
 		newNode.next = this.head;
@@ -41,83 +33,16 @@ public class LinkedList /*implements List*/ {
 		this.head = newNode;	
 		this.size++;
 	}
-
-	/*
-	public void add(int pos, Object obj) throws Exception { 
-		if (pos > this.size) {
-			throw new Exception("pos: " + pos +" is greater than size");
-		}
-		if (pos == 0 || this.size == 0) {
-			add(obj);	
-			return;
-		}
-		int listPosition = 0;
-		Node currNode = this.head;
-		while (currNode.value != null && listPosition < pos) {
-			currNode = currNode.next;
-			listPosition++;
-		}
-		currNode.prev.next = new Node(obj);
-		currNode.prev.next.prev = currNode.prev;
-		currNode.prev.next.next = currNode;
-		currNode.prev = currNode.prev.next;
-		this.size++;
-	}
-	*/
-	/*
-	public Object get(int pos) throws Exception {
-		if (pos < 0 || this.size == 0 || pos > this.size) {
-			throw new Exception("Error getting pos: " + pos);
-		}
-		int listPosition = 0;
-		Node currNode = this.head;
-		while (currNode.value != null && listPosition < pos) {
-			currNode = currNode.next;
-			listPosition++;
-		}
-		return currNode.value;
-	}
-	*/
 	
-	public Object get(String key) throws Exception {
+	public Object get(String key) {
 		if (this.size == 0) {
-			throw new Exception("Nothing in linked list");
+			return null;
 		}
 		Node currNode = this.head;
-		//System.out.println("Size of my linked list: " + this.size());
-		//System.out.println("My key is: " + currNode.key);
-		//System.out.println("The key I'm looking for is: " + key);
-		//System.out.println("Next key: " + currNode.next.key);
-		while (currNode.next.key != null) {
-			//System.out.println("My key is: " + currNode.key);
-			//System.out.println("The key I'm looking for is: " + key);
-			if (currNode.key.equals(key)) {    
-				break;
-			}
+		while (currNode.next.key != null && !currNode.key.equals(key)) {
 			currNode = currNode.next;
 		}
-		return (currNode.key != null) ? (currNode.key.equals(key)) ? currNode.value : null : null;
-	}
-	
-	public Object remove(int pos) throws Exception {
-		if (pos < 0 || this.size == 0 || pos > this.size) {
-			throw new Exception("Error removing with pos: " + pos);
-		}
-		Node currNode = this.head;
-		if (this.size == 1 || pos == 0) {
-			this.head = currNode.next;
-			this.size--;
-			return currNode.value;	
-		}
-		int listPosition = 0;
-		while (listPosition < pos) {
-			currNode = currNode.next;	
-			listPosition++;
-		}
-		currNode.prev.next = currNode.next;
-		currNode.next.prev = currNode.prev;
-		this.size--;
-		return currNode.value;
+		return (currNode.key.equals(key)) ? currNode.value : null;
 	}
 	
 	public Object remove(String key) throws Exception {

@@ -2,36 +2,23 @@ import java.util.Arrays;
 
 public class Hashtable<K, V> {
 
-	public LinkedList[] arr;  /* Array of Linked list  	   */
-	public int size;     		/* size of the overall array       */
-	public int numItems; 		/* num of Linked List in the array */
+	public LinkedList[] arr;  /* Array of Linked list  	     */
+	public int size;     	  /* size of the overall array       */
 
 	/**
-	 * Initializes the Hashtable with:
-	 * - default size of 10 as the array
-	 * - zero items
+	 * Defaults the hashtable size to 2027
 	 */
 	public Hashtable() {
-		this.arr = new LinkedList[10];
-		//createArray();
-		/*
-		for (int i = 0; i < arr.length; i++) {
-			System.out.println("position " + i + " contains " + this.arr[i]);
-		} */
-		this.size = 10;
-		this.numItems = 0;
-		//System.out.println("Array: " + Arrays.toString(arr));
+		this(2027);
 	}
 
-	/*	
-	public void createArray() {
-		LinkedList[] temp = new LinkedList[10];
-		for (int i = 0; i < 10; i++) {
-			temp[i] = new LinkedList(); 
-		}
-		arr = temp;
+	/**
+	 * Initializes the Hashtable with a given size
+	 */
+	public Hashtable(int size) {
+		this.arr = new LinkedList[size];
+		this.size = size;
 	}
-	*/
 
 	/**
 	 * Checks to see if the key exists in the hashMap
@@ -40,7 +27,6 @@ public class Hashtable<K, V> {
 	 * @return true If the key exists, otherwise false
 	 */
 	public boolean containsKey(String key) {
-		//System.out.println("get(key): " + get(key));
 		return (get(key) != null) ? true : false;	
 	}
 
@@ -52,40 +38,34 @@ public class Hashtable<K, V> {
 	 * @param String The value associated with the key or null if not found or DNE 
 	 */
 	public String get(String key) {
-		int hashCode = Math.abs(key.hashCode());
-		int index = hashCode % size;
-		//System.out.println("HashCode: " + hashCode);
-		//System.out.println("Size: " + size);
-		//System.out.println("Hash % size: " + (hashCode % size));
-		try {
-			if (arr[index].size() > 0) {
-				//System.out.println("Index: " + index);
-				//System.out.println("arr[index]: " + arr[index]);
-				//System.out.println("arr[index].get(key): " + arr[index].get(key));
-				return arr[index].get(key) != null ? arr[index].get(key).toString() : null;
-			}
-		} catch (Exception e) {
-			//e.printStackTrace();
-		}
+		int index = getIndex(key); 
+		if (arr[index].size() > 0) {
+			return arr[index].get(key) != null ? arr[index].get(key).toString() : null;
+		} 
 		return null;
 	}
 
-	public void put(String key, String value) {
+	/**
+	 * Gets the Index in the array that the linked list for the key
+	 * is stored in
+	 *
+	 * @param key The key to get the linked list / index of
+	 * @return index of the linked list with the key
+	 */
+	public int getIndex(String key) {
 		int hashCode = Math.abs(key.hashCode());
-		int index = hashCode % size;
+		return hashCode % size;
+	}
+
+	public void put(String key, String value) {
+		int index = getIndex(key);
 		try {
-			//System.out.println(arr[hashCode % size]);
-			//System.out.println(!containsKey(key));
 			if (arr[index] == null) {
-				//System.out.println("Creating new linkedlist");
 				LinkedList temp = new LinkedList();
 				temp.add(key, value);
 				arr[index] = temp;
-				numItems++;
 			} else {
-				//System.out.println("Starting to add to list");
 				arr[index].add(key, value);
-				//System.out.println("Added to LinkedList");
 			}
 		} catch (Exception e) {
 			System.out.println(e + " Error caught in put method");
@@ -98,9 +78,8 @@ public class Hashtable<K, V> {
 		if (!containsKey(key)) {
 			throw new Exception("No key/value pair found for the key: " + key);
 		}
-		int hashCode = Math.abs(key.hashCode());
-		int index = hashCode % size;
-		Object temp = arr[index].remove(0);
+		int index = getIndex(key); 
+		Object temp = arr[index].remove(key);
 		return temp.toString();
 	}
 
