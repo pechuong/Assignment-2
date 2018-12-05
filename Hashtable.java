@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class Hashtable<K, V> {
 
-	public final LinkedList[] arr;  /* Array of Linked list  	   */
+	public LinkedList[] arr;  /* Array of Linked list  	   */
 	public int size;     		/* size of the overall array       */
 	public int numItems; 		/* num of Linked List in the array */
 
@@ -12,10 +12,23 @@ public class Hashtable<K, V> {
 	 * - zero items
 	 */
 	public Hashtable() {
-		this.arr = new LinkedList[10];
+		this.arr = null;
+		createArray();
+		/*
+		for (int i = 0; i < arr.length; i++) {
+			System.out.println("position " + i + " contains " + this.arr[i]);
+		} */
 		this.size = 10;
 		this.numItems = 0;
 		//System.out.println("Array: " + Arrays.toString(arr));
+	}
+	
+	public void createArray() {
+		LinkedList[] temp = new LinkedList[10];
+		for (int i = 0; i < 10; i++) {
+			temp[i] = new LinkedList(); 
+		}
+		arr = temp;
 	}
 
 	/**
@@ -25,6 +38,7 @@ public class Hashtable<K, V> {
 	 * @return true If the key exists, otherwise false
 	 */
 	public boolean containsKey(String key) {
+		//System.out.println("get(key): " + get(key));
 		return (get(key) != null) ? true : false;	
 	}
 
@@ -41,53 +55,51 @@ public class Hashtable<K, V> {
 		//System.out.println("HashCode: " + hashCode);
 		//System.out.println("Size: " + size);
 		//System.out.println("Hash % size: " + (hashCode % size));
-		if (index >= size) {
-			return null;
-		}
 		try {
-			if (arr[hashCode % size] != null) {
-				return arr[hashCode % size].get(0).toString();
+			if (arr[index].size() > 0) {
+				//System.out.println("Index: " + index);
+				//System.out.println("arr[index]: " + arr[index]);
+				//System.out.println("arr[index].get(key): " + arr[index].get(key));
+				return arr[index].get(key) != null ? arr[index].get(key).toString() : null;
 			}
 		} catch (Exception e) {
-			System.out.println(e + " when in get(key) method");
+			//e.printStackTrace();
 		}
 		return null;
-		//return (arr[hashCode % size] != null) ? arr[hashCode % size].get(0).toString() : null;
 	}
 
 	public void put(String key, String value) {
-		if (size + 1 >= arr.length) {
-			growArray();
-		}
-		int hashCode = key.hashCode();
+		int hashCode = Math.abs(key.hashCode());
+		int index = hashCode % size;
 		try {
 			//System.out.println(arr[hashCode % size]);
-			if (arr[hashCode % size] == null) {
+			//System.out.println(!containsKey(key));
+			if (arr[index] == null) {
+				//System.out.println("Creating new linkedlist");
 				LinkedList temp = new LinkedList();
-				temp.add(value);
-				arr[hashCode % size] = temp;
+				temp.add(key, value);
+				arr[index] = temp;
 				numItems++;
 			} else {
-				arr[hashCode % size].add(value);
+				//System.out.println("Starting to add to list");
+				arr[index].add(key, value);
+				//System.out.println("Added to LinkedList");
 			}
 		} catch (Exception e) {
-			//System.out.println(e + " Error caught in put method");
+			System.out.println(e + " Error caught in put method");
 		}
 	}
 
 	public String remove(String key) throws Exception {
 		// If I don't get a value from get or if the key doesn't exist
 		// I want to throw an exception
-		if (get(key) == null || !containsKey(key)) {
+		if (!containsKey(key)) {
 			throw new Exception("No key/value pair found for the key: " + key);
 		}
 		int hashCode = Math.abs(key.hashCode());
 		int index = hashCode % size;
-		return arr[index].remove(0).toString();
-	}
-
-	public void growArray() {
-		
+		Object temp = arr[index].remove(0);
+		return temp.toString();
 	}
 
 	@Override

@@ -132,6 +132,7 @@ public class Assignment2Test {
 		    end = System.currentTimeMillis();
 		} catch (Exception e) {
 			System.out.println("Unable to conduct timing test.");
+			System.out.println(e);
 			success = false;
 		}
 		
