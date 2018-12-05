@@ -12,8 +12,8 @@ public class Hashtable<K, V> {
 	 * - zero items
 	 */
 	public Hashtable() {
-		this.arr = null;
-		createArray();
+		this.arr = new LinkedList[10];
+		//createArray();
 		/*
 		for (int i = 0; i < arr.length; i++) {
 			System.out.println("position " + i + " contains " + this.arr[i]);
@@ -22,7 +22,8 @@ public class Hashtable<K, V> {
 		this.numItems = 0;
 		//System.out.println("Array: " + Arrays.toString(arr));
 	}
-	
+
+	/*	
 	public void createArray() {
 		LinkedList[] temp = new LinkedList[10];
 		for (int i = 0; i < 10; i++) {
@@ -30,6 +31,7 @@ public class Hashtable<K, V> {
 		}
 		arr = temp;
 	}
+	*/
 
 	/**
 	 * Checks to see if the key exists in the hashMap
