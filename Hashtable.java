@@ -32,7 +32,6 @@ public class Hashtable<K, V> {
 
 	/**
 	 * Gets the value associated with the given key
-	 * (First value at head of linkedlist)
 	 *
 	 * @param key The key to search for a value in
 	 * @param String The value associated with the key or null if not found or DNE 
@@ -57,9 +56,19 @@ public class Hashtable<K, V> {
 		return hashCode % size;
 	}
 
+	/**
+	 * Puts the key and value pair into the hashtable
+	 *
+	 * @param key The key to put the value with
+	 * @param value The value associated with the key
+	 */
 	public void put(String key, String value) {
 		int index = getIndex(key);
 		try {
+			// If a linked list doesn't exist at the index
+			// 1.) Make one
+			// 2.) Put the key and value pair in
+			// 3.) Wire the linked list into the index in the array
 			if (arr[index] == null) {
 				LinkedList temp = new LinkedList();
 				temp.add(key, value);
